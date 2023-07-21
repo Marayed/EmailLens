@@ -1,8 +1,11 @@
+@file:OptIn(ExperimentalUnsignedTypes::class)
+
 package org.opencv.core
 
 import org.opencv.core.Mat.*
 import java.lang.RuntimeException
 
+@OptIn(ExperimentalUnsignedTypes::class)
 fun Mat.get(row: Int, col: Int, data: UByteArray)  = this.get(row, col, data.asByteArray())
 fun Mat.get(indices: IntArray, data: UByteArray)  = this.get(indices, data.asByteArray())
 fun Mat.put(row: Int, col: Int, data: UByteArray)  = this.put(row, col, data.asByteArray())

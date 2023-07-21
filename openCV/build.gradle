@@ -88,7 +88,7 @@
 //   }
 //
 plugins {
-    id 'org.jetbrains.kotlin.android' version '1.9.0' }
+    id 'org.jetbrains.kotlin.android' version '1.7.0' }
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
@@ -142,9 +142,9 @@ android {
     sourceSets {
         main {
             jniLibs.srcDirs = ['native/libs']
-            java.srcDirs = ['java/src']
-            aidl.srcDirs = ['java/src']
-            res.srcDirs = ['java/res']
+            java.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            res.srcDirs = ['res']
             manifest.srcFile 'java/AndroidManifest.xml'
         }
     }

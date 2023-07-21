@@ -41,5 +41,5 @@ dependencies {
     implementation 'cz.adaptech.tesseract4android:tesseract4android:4.5.0'
 
     // To use OpenMP variant:
-    implementation 'cz.adaptech.tesseract4android:tesseract4android-openmp:4.5.0'
+    //implementation 'cz.adaptech.tesseract4android:tesseract4android-openmp:4.5.0'
 }
