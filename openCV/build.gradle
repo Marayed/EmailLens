@@ -99,7 +99,7 @@ def openCVersionCode = ((4 * 100 + 8) * 100 + 0) * 10 + 0
 println "OpenCV: " +openCVersionName + " " + project.buildscript.sourceFile
 
 android {
-    namespace 'com.example.opencv'
+    namespace 'org.opencv'
     compileSdkVersion 33
 
     defaultConfig {
@@ -142,9 +142,9 @@ android {
     sourceSets {
         main {
             jniLibs.srcDirs = ['native/libs']
-            java.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            res.srcDirs = ['res']
+            java.srcDirs = ['java/src']
+            aidl.srcDirs = ['java/src']
+            res.srcDirs = ['java/res']
             manifest.srcFile 'java/AndroidManifest.xml'
         }
     }
