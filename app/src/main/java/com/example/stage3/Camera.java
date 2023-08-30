@@ -1,71 +1,71 @@
 package com.example.stage3;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraDevice;
-import android.hardware.camera2.CameraManager;
+import android.app.Activity;
 import android.os.Bundle;
-import android.view.TextureView;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-    public class Camera extends AppCompatActivity {
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.JavaCameraView;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Mat;
 
-    private static final int CAMERA_PERMISSION_CODE = 100;
-    private TextureView textureView;
-    private CameraManager cameraManager;
-    private CameraDevice cameraDevice;
+public class Camera extends Activity implements CameraBridgeViewBase.CvCameraViewListener2 {
+        private JavaCameraView cameraView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
+        private BaseLoaderCallback loaderCallback = new BaseLoaderCallback(this) {
+            @Override
+            public void onManagerConnected(int status) {
+                switch (status) {
+                    case LoaderCallbackInterface.SUCCESS:
+                        cameraView.enableView();
+                        break;
+                    default:
+                        super.onManagerConnected(status);
+                        break;
+                }
+            }
+        };
 
-        //textureView = findViewById(R.id.textureView);
-        cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
-        } else {
-            openCamera();
-        }
-    }
-
-    private void openCamera() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            // Handle the case where camera permission is not granted
-            // You might show a permission request dialog here
-            return;
-        }
-
-        try {
-            String cameraId = cameraManager.getCameraIdList()[0]; // Use the first camera
-            cameraManager.openCamera(cameraId, stateCallback, null);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
         @Override
-        public void onOpened(@NonNull CameraDevice camera) {
-            cameraDevice = camera;
-            // Camera opened, you can now start preview or capture
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_camera);
+
+            cameraView = findViewById(R.id.camera_view);
+            cameraView.setVisibility(CameraBridgeViewBase.VISIBLE);
+            cameraView.setCvCameraViewListener(this);
         }
 
         @Override
-        public void onDisconnected(@NonNull CameraDevice camera) {
-            camera.close();
-            cameraDevice = null;
+        public void onResume() {
+            super.onResume();
+            OpenCVLoader.initDebug();
+            loaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }
 
         @Override
-        public void onError(@NonNull CameraDevice camera, int error) {
-            camera.close();
-            cameraDevice = null;
+        public void onPause() {
+            super.onPause();
+            if (cameraView != null)
+                cameraView.disableView();
         }
-    };
+
+        @Override
+        public void onCameraViewStarted(int width, int height) {
+            // Camera started, perform initialization if needed
+        }
+
+        @Override
+        public void onCameraViewStopped() {
+            // Camera stopped, release resources if needed
+        }
+
+        @Override
+        public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+            // Process each camera frame using OpenCV functions
+            Mat frame = inputFrame.rgba();
+            // Perform your OpenCV processing here
+            return frame;
+        }
 }

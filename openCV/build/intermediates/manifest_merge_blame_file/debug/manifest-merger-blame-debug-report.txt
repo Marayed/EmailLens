@@ -3,6 +3,6 @@
 3    package="org.opencv" >
 4
 5    <uses-sdk android:minSdkVersion="24" />
-5-->C:\Users\benje\Downloads\EmailLens-main\EmailLens-main\openCV\java\AndroidManifest.xml
+5-->C:\Users\Marayed\Desktop\stage\EmailLens\openCV\java\AndroidManifest.xml
 6
 7</manifest>
