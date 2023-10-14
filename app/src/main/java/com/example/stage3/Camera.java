@@ -34,7 +34,7 @@ public class Camera extends AppCompatActivity implements CameraBridgeViewBase.Cv
 
     static {
         if (!OpenCVLoader.initDebug()) {
-            // Handle initialization error
+            // init opencv
         }
     }
 
@@ -51,13 +51,10 @@ public class Camera extends AppCompatActivity implements CameraBridgeViewBase.Cv
         captureButton = findViewById(R.id.capture_button);
         capturedImageView = findViewById(R.id.captured_image_view);
 
-        // Initialize Tesseract OCR
         tessBaseAPI = new TessBaseAPI();
 
-        // Copy the trained data from assets to external storage (if not already done)
         copyTrainedDataToExternalStorage("eng.traineddata");
 
-        // Set the path to the trained data in external storage
         tessBaseAPI.init(getExternalFilesDir(null).getAbsolutePath(), "eng");
     }
 
@@ -98,7 +95,7 @@ public class Camera extends AppCompatActivity implements CameraBridgeViewBase.Cv
             mOpenCvCameraView.disableView();
         }
 
-        // Release Tesseract resources
+        // Release resources
         if (tessBaseAPI != null) {
             tessBaseAPI.clear();
         }
@@ -115,12 +112,14 @@ public class Camera extends AppCompatActivity implements CameraBridgeViewBase.Cv
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
                 fos.close();
 
-                // Process the captured image with Tesseract OCR
                 String email = extractEmailFromImage(file.getAbsolutePath());
 
                 if (email != null && !email.isEmpty()) {
-                    // Do something with the extracted email address
-                    Toast.makeText(this, "Email detected: " + email, Toast.LENGTH_SHORT).show();
+                    //MongoDBHandler mongoDBHandler = new MongoDBHandler();
+                    //mongoDBHandler.insertEmail(email);
+                    //mongoDBHandler.close();
+
+                    Toast.makeText(this, "Email detected and added to MongoDB: " + email, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "No email address found.", Toast.LENGTH_SHORT).show();
                 }
@@ -135,8 +134,6 @@ public class Camera extends AppCompatActivity implements CameraBridgeViewBase.Cv
         String recognizedText = tessBaseAPI.getUTF8Text();
         tessBaseAPI.clear();
 
-        // Implement email extraction logic (regex or custom logic) on the recognized text
-        // For simplicity, a basic regex pattern is used here
         Pattern pattern = Pattern.compile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}");
         Matcher matcher = pattern.matcher(recognizedText);
 
