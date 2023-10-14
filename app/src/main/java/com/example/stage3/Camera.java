@@ -118,10 +118,9 @@ public class Camera extends AppCompatActivity implements CameraBridgeViewBase.Cv
                     //MongoDBHandler mongoDBHandler = new MongoDBHandler();
                     //mongoDBHandler.insertEmail(email);
                     //mongoDBHandler.close();
-                    email = "salah.bousbia@esprit.tn";
                     Toast.makeText(this, "Email detected and added to db: " + email, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Email detected, and added to db:" + email, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Email Not detected", Toast.LENGTH_SHORT).show();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
